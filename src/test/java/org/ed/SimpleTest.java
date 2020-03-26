@@ -20,10 +20,8 @@ public class SimpleTest {
     public static void main(String[] args) throws IOException {
     	System.setProperty("webdriver.gecko.driver","/usr/local/Cellar/geckodriver/0.26.0/bin/geckodriver");
     	
-    	
-    	DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-    	
     	// --------- proxy setup ----------
+    	DesiredCapabilities capabilities = DesiredCapabilities.firefox();
     	BrowserMobProxy proxy = new BrowserMobProxyServer();
         proxy.start(0);
         proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT );
@@ -33,12 +31,14 @@ public class SimpleTest {
         capabilities.setCapability(CapabilityType.PROXY, seleniumProxy);
         // ------------------------------
     	
-    	@SuppressWarnings("deprecation")
-		WebDriver driver = new FirefoxDriver(capabilities);
+        @SuppressWarnings("deprecation")
+    	WebDriver driver = new FirefoxDriver(capabilities);
 
         driver.get("https://google.com");
         Har har = proxy.getHar();
-        har.writeTo(new File("/Users/edsouza/Downloads/google.har"));
+        
+        String homeDir = System.getProperty("user.home");
+        har.writeTo(new File(homeDir + "/Downloads/google.har"));
 
         System.out.println(driver.getTitle());
        
